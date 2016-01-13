@@ -1,6 +1,7 @@
 package com.shdwlf.boom.listeners;
 
 import com.shdwlf.boom.Boom;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -42,12 +43,12 @@ public class BlockListener implements Listener {
     public void onBreak(BlockBreakEvent event) {
         if(plugin.getBlockManager().isRegistered(event.getBlock())) {
             if(event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.SHEARS
-                    /*|| event.getPlayer().getGameMode() == GameMode.CREATIVE)*/ ){
+                    || (plugin.getConfig().getBoolean("ignore-creative", false) && event.getPlayer().getGameMode() == GameMode.CREATIVE)) {
                 //Give block + tnt
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.TNT, 1));
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(event.getBlock().getType(), 1));
+                plugin.getBlockManager().unregisterBlock(event.getBlock());
             }else {
-                //kaboom dude
                 plugin.getBlockManager().detonateBlock(event.getBlock());
             }
         }

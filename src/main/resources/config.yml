@@ -1,3 +1,5 @@
 #Number of ticks between auto saves. 0 to disable
 autosave: 6000
+#Ignore traps if player is in creative
+ignore-creative: false
 registered-blocks:
