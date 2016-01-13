@@ -58,12 +58,8 @@ public class BlockListener implements Listener {
      */
     @EventHandler
     public void onExplode(EntityExplodeEvent event) {
-        for(Block block : event.blockList()) {
-            if (plugin.getBlockManager().isRegistered(block)) {
-                plugin.getBlockManager().detonateBlock(block, (int) (Math.random() * 15) + 10);
-                event.blockList().remove(block);
-            }
-        }
+        event.blockList().stream().filter(block -> plugin.getBlockManager().isRegistered(block))
+                .forEach(block -> plugin.getBlockManager().detonateBlock(block, (int) (Math.random() * 15) + 10));
     }
 
 }
