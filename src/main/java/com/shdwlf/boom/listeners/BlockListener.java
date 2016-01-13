@@ -42,8 +42,9 @@ public class BlockListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
         if(plugin.getBlockManager().isRegistered(event.getBlock())) {
-            if(event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.SHEARS
-                    || (plugin.getConfig().getBoolean("ignore-creative", false) && event.getPlayer().getGameMode() == GameMode.CREATIVE)) {
+            if((event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.SHEARS && event.getPlayer().hasPermission("boom.bypass.shears"))
+                    || (plugin.getConfig().getBoolean("ignore-creative", false) && event.getPlayer().getGameMode() == GameMode.CREATIVE)
+                    || event.getPlayer().hasPermission("boom.bypass")) {
                 //Give block + tnt
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.TNT, 1));
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(event.getBlock().getType(), 1));

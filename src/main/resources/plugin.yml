@@ -4,3 +4,10 @@ version: ${project.version}
 main: com.shdwlf.boom.Boom
 commands:
   boom:
+permissions:
+  boom.bypass:
+    description: Always bypass TNT Traps
+    default: false
+  boom.bypass.shears:
+    description: Bypass TNT Traps when using Shears
+    default: true
