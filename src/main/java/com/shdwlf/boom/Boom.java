@@ -14,7 +14,6 @@ import java.io.IOException;
 public class Boom extends JavaPlugin {
 
     private BlockManager blockManager;
-    private Metrics.Graph graph;
 
     @Override
     public void onEnable() {
@@ -37,17 +36,6 @@ public class Boom extends JavaPlugin {
         } catch (IOException e) {
             Bukkit.getLogger().info("[Boom] Failed to enable Metrics. " + e.getLocalizedMessage());
         }
-    }
-
-    private void updateGraph(Metrics.Graph licenseGraph) {
-        licenseGraph.addPlotter(new Metrics.Plotter() {
-            @Override
-            public int getValue() {
-                int count = blockManager.getDetonationCount();
-                blockManager.resetDetonationCount();
-                return count;
-            }
-        });
     }
 
     private void registerListeners() {
