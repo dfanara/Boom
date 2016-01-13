@@ -1,7 +1,7 @@
 package com.shdwlf.boom.listeners;
 
 import com.shdwlf.boom.Boom;
-import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -24,15 +24,25 @@ public class InteractListener implements Listener {
      */
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if(event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking()) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking()) {
             Block clickedBlock = event.getClickedBlock();
-            if(clickedBlock != null && clickedBlock.getType() == Material.TNT) {
+            if (clickedBlock != null && clickedBlock.getType() == Material.TNT) {
                 ItemStack inHand = event.getPlayer().getItemInHand();
-                if(inHand != null && inHand.getType().isBlock() && inHand.getType() != Material.TNT && inHand.getType().isOccluding()) {
+                if (inHand != null && inHand.getType().isBlock() && inHand.getType() != Material.TNT && inHand.getType().isOccluding()) {
                     clickedBlock.setType(inHand.getType());
                     clickedBlock.setData((byte) inHand.getDurability());
                     clickedBlock.getState().update();
-                    //TODO: remove block from player inventory
+                    if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                        //Remove item from player
+                        if (inHand.getAmount() > 1) {
+                            inHand.setAmount(inHand.getAmount() - 1);
+                            event.getPlayer().setItemInHand(inHand);
+                            event.getPlayer().updateInventory();
+                        } else {
+                            event.getPlayer().setItemInHand(null);
+                            event.getPlayer().updateInventory();
+                        }
+                    }
                     plugin.getBlockManager().registerBlock(clickedBlock);
                     event.getPlayer().getLocation().getWorld().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1F, 1F);
                     event.setCancelled(true);
