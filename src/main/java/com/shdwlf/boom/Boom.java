@@ -27,6 +27,7 @@ public class Boom extends JavaPlugin {
         if(getConfig().getLong("autosave") > 0)
             getServer().getScheduler().runTaskTimer(this, () -> {
                 System.out.println("[Boom] Autosaving configuration.");
+                blockManager.save();
             }, getConfig().getLong("autosave", 6000), getConfig().getLong("autosave", 6000));
 
         try {
