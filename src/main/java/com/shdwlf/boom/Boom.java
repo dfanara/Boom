@@ -14,6 +14,7 @@ import java.io.IOException;
 public class Boom extends JavaPlugin {
 
     private BlockManager blockManager;
+    private Metrics.Graph graph;
 
     @Override
     public void onEnable() {
@@ -23,24 +24,30 @@ public class Boom extends JavaPlugin {
         blockManager.load();
 
         registerListeners();
-        //TODO: Autosave feature
+
+        if(getConfig().getLong("autosave") > 0)
+            getServer().getScheduler().runTaskTimer(this, () -> {
+                System.out.println("[Boom] Autosaving configuration.");
+            }, getConfig().getLong("autosave", 6000), getConfig().getLong("autosave", 6000));
 
         try {
             Metrics metrics = new Metrics(this);
-            Metrics.Graph licenseGraph = metrics.createGraph("Detonations");
-            licenseGraph.addPlotter(new Metrics.Plotter() {
-                @Override
-                public int getValue() {
-                    int count = blockManager.getDetonationCount();
-                    blockManager.resetDetonationCount();
-                    return count;
-                }
-            });
             metrics.start();
             Bukkit.getLogger().info("[Boom] Metrics enabled.");
         } catch (IOException e) {
             Bukkit.getLogger().info("[Boom] Failed to enable Metrics. " + e.getLocalizedMessage());
         }
+    }
+
+    private void updateGraph(Metrics.Graph licenseGraph) {
+        licenseGraph.addPlotter(new Metrics.Plotter() {
+            @Override
+            public int getValue() {
+                int count = blockManager.getDetonationCount();
+                blockManager.resetDetonationCount();
+                return count;
+            }
+        });
     }
 
     private void registerListeners() {
@@ -51,6 +58,7 @@ public class Boom extends JavaPlugin {
     @Override
     public void onDisable() {
         blockManager.save();
+        Bukkit.getScheduler().cancelAllTasks();
     }
 
     @Override

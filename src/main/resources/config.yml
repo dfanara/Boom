@@ -1,1 +1,3 @@
+#Number of ticks between auto saves. 0 to disable
+autosave: 6000
 registered-blocks:
