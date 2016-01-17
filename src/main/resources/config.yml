@@ -2,4 +2,5 @@
 autosave: 6000
 #Ignore traps if player is in creative
 ignore-creative: false
+update-check: true
 registered-blocks:
