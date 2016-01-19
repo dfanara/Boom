@@ -10,13 +10,18 @@ import java.util.List;
 
 public class BlockManager {
 
+    private final Boom plugin;
     //Block format: world,x,y,z
     private List<String> registeredBlocks = new ArrayList<>();
     private int detonationCount = 0;
-    private final Boom plugin;
+    private int registerCount = 0;
 
     public BlockManager(Boom plugin) {
         this.plugin = plugin;
+    }
+
+    public static String formatString(Location location) {
+        return location.getWorld().getName() + "," + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
     }
 
     public void load() {
@@ -33,6 +38,7 @@ public class BlockManager {
     }
 
     public void registerBlock(Location location) {
+        registerCount++;
         registeredBlocks.add(formatString(location));
     }
 
@@ -64,16 +70,15 @@ public class BlockManager {
         detonationCount++;
     }
 
-    public static String formatString(Location location) {
-        return location.getWorld().getName() + "," + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
-    }
-
     public int getDetonationCount() {
-        return this.detonationCount;
+        int count = detonationCount;
+        detonationCount = 0;
+        return count;
     }
 
-    public void resetDetonationCount() {
-        this.detonationCount = 0;
+    public int getRegisterCount() {
+        int count = registerCount;
+        registerCount = 0;
+        return count;
     }
-
 }

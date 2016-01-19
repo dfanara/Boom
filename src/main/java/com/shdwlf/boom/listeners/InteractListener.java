@@ -1,10 +1,12 @@
 package com.shdwlf.boom.listeners;
 
 import com.shdwlf.boom.Boom;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -27,8 +29,13 @@ public class InteractListener implements Listener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking()) {
             Block clickedBlock = event.getClickedBlock();
             if (clickedBlock != null && clickedBlock.getType() == Material.TNT) {
+                event.setCancelled(true);
                 ItemStack inHand = event.getPlayer().getItemInHand();
-                if (inHand != null && inHand.getType().isBlock() && inHand.getType() != Material.TNT && inHand.getType().isOccluding()) {
+                if (!event.getPlayer().hasPermission("boom.use")) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission.");
+                    return;
+                }
+                if (inHand != null && inHand.getType().isBlock() && inHand.getType() != Material.TNT && inHand.getType().isOccluding() && checkEconomy(event.getPlayer())) {
                     clickedBlock.setType(inHand.getType());
                     clickedBlock.setData((byte) inHand.getDurability());
                     clickedBlock.getState().update();
@@ -43,11 +50,30 @@ public class InteractListener implements Listener {
                             event.getPlayer().updateInventory();
                         }
                     }
+
                     plugin.getBlockManager().registerBlock(clickedBlock);
+
+                    if (plugin.economy != null)
+                        plugin.economy.withdrawPlayer(event.getPlayer(), plugin.getConfig().getDouble("economy.create-cost", 1000));
+
                     event.getPlayer().getLocation().getWorld().playSound(event.getPlayer().getLocation(), Sound.LEVEL_UP, 1F, 1F);
-                    event.setCancelled(true);
                 }
             }
         }
     }
+
+    private boolean checkEconomy(Player player) {
+        if (plugin.economy == null)
+            return true;
+        else {
+            double cost = plugin.getConfig().getDouble("economy.create-cost", 1000);
+            if (plugin.economy.has(player, cost)) {
+                return true;
+            } else {
+                player.sendMessage(ChatColor.GRAY + "[" + ChatColor.RED + "Boom" + ChatColor.GRAY + "] " + ChatColor.RED + "You do not have enough money (" + plugin.economy.format(cost) + ")!");
+                return false;
+            }
+        }
+    }
+
 }

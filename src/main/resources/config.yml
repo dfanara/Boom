@@ -2,5 +2,10 @@
 autosave: 6000
 #Ignore traps if player is in creative
 ignore-creative: false
+#Automatically check for updates
 update-check: true
+
+economy:
+  create-cost: 1000 #Cost to create a TNT Trap
+#Do Not Edit Below This Line. List of all registered TNT Traps.
 registered-blocks:

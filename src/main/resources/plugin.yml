@@ -2,6 +2,7 @@ name: Boom
 author: Shadowwolf97
 version: ${project.version}
 main: com.shdwlf.boom.Boom
+softdepend: [Vault]
 commands:
   boom:
 permissions:
@@ -11,3 +12,6 @@ permissions:
   boom.bypass.shears:
     description: Bypass TNT Traps when using Shears
     default: true
+  boom.use:
+    description: Create TNT Traps
+    default: op

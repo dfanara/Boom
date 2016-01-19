@@ -25,9 +25,9 @@ public class BlockListener implements Listener {
      */
     @EventHandler
     public void onRedstone(BlockRedstoneEvent event) {
-        if(event.getOldCurrent() == 0 && event.getNewCurrent() > 0) {
+        if (event.getOldCurrent() == 0 && event.getNewCurrent() > 0) {
             Block triggeredBlock = event.getBlock();
-            for(BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN}) {
+            for (BlockFace face : new BlockFace[]{BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN}) {
                 Block activatedBlock = triggeredBlock.getRelative(face);
                 if (plugin.getBlockManager().isRegistered(activatedBlock)) {
                     plugin.getBlockManager().detonateBlock(activatedBlock);
@@ -41,15 +41,15 @@ public class BlockListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
-        if(plugin.getBlockManager().isRegistered(event.getBlock())) {
-            if((event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.SHEARS && event.getPlayer().hasPermission("boom.bypass.shears"))
+        if (plugin.getBlockManager().isRegistered(event.getBlock())) {
+            if ((event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.SHEARS && event.getPlayer().hasPermission("boom.bypass.shears"))
                     || (plugin.getConfig().getBoolean("ignore-creative", false) && event.getPlayer().getGameMode() == GameMode.CREATIVE)
                     || event.getPlayer().hasPermission("boom.bypass")) {
                 //Give block + tnt
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.TNT, 1));
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(event.getBlock().getType(), 1));
                 plugin.getBlockManager().unregisterBlock(event.getBlock());
-            }else {
+            } else {
                 plugin.getBlockManager().detonateBlock(event.getBlock());
             }
         }

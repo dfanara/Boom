@@ -20,8 +20,9 @@ Permissions
 
 Permission | Description | default
 -------------- | -------------- | --------------
+boom.use | Allow players to create TNT Traps. | op
 boom.bypass | Always bypass and disarm traps. | false
-boom.bypass.shears | Allow players to bypass traps using shears | true
+boom.bypass.shears | Allow players to bypass traps using shears. | true
 
 Installing
 ----------
