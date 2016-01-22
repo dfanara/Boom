@@ -62,37 +62,37 @@ public class Boom extends JavaPlugin {
     }
 
     private void setupMetrics() {
-        KeenMetrics keenMetrics = new KeenMetrics(
-                this,
-                "569bd26e96773d1f6d1407da",
-                "04b9487b5c58ff7623ec08c7fcd600ef6807a6c24f680037ade7791e8c7d438a63a091a5ac972e3c1447496282ab7f6ca8c02203c3b69d4871e187ffb4fa9a5dbf75189c205cd87ad0f12cbfbf939aa75b6c862166021559d5ef1d628535da69"
-        );
-        keenMetrics.start();
-
-        keenMetrics.registerMetricReporter(new KeenMetrics.KeenMetricReporter() {
-
-            @Override
-            public HashMap<String, Object> getData() {
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("detonations", blockManager.getDetonationCount());
-                data.put("registrations", blockManager.getRegisterCount());
-                return data;
-            }
-
-            @Override
-            public String getMetricName() {
-                return "blockdata";
-            }
-
-        });
-
-        try {
-            Metrics metrics = new Metrics(this);
-            metrics.start();
-            Bukkit.getLogger().info("[Boom] Metrics enabled.");
-        } catch (IOException e) {
-            Bukkit.getLogger().info("[Boom] Failed to enable Metrics. " + e.getLocalizedMessage());
-        }
+//        KeenMetrics keenMetrics = new KeenMetrics(
+//                this,
+//                "569bd26e96773d1f6d1407da",
+//                "04b9487b5c58ff7623ec08c7fcd600ef6807a6c24f680037ade7791e8c7d438a63a091a5ac972e3c1447496282ab7f6ca8c02203c3b69d4871e187ffb4fa9a5dbf75189c205cd87ad0f12cbfbf939aa75b6c862166021559d5ef1d628535da69"
+//        );
+//        keenMetrics.start();
+//
+//        keenMetrics.registerMetricReporter(new KeenMetrics.KeenMetricReporter() {
+//
+//            @Override
+//            public HashMap<String, Object> getData() {
+//                HashMap<String, Object> data = new HashMap<>();
+//                data.put("detonations", blockManager.getDetonationCount());
+//                data.put("registrations", blockManager.getRegisterCount());
+//                return data;
+//            }
+//
+//            @Override
+//            public String getMetricName() {
+//                return "blockdata";
+//            }
+//
+//        });
+//
+//        try {
+//            Metrics metrics = new Metrics(this);
+//            metrics.start();
+//            Bukkit.getLogger().info("[Boom] Metrics enabled.");
+//        } catch (IOException e) {
+//            Bukkit.getLogger().info("[Boom] Failed to enable Metrics. " + e.getLocalizedMessage());
+//        }
     }
 
     private boolean setupEconomy() {
