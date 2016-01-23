@@ -70,7 +70,9 @@ public class InteractListener implements Listener {
             if (plugin.economy.has(player, cost)) {
                 return true;
             } else {
-                player.sendMessage(ChatColor.GRAY + "[" + ChatColor.RED + "Boom" + ChatColor.GRAY + "] " + ChatColor.RED + "You do not have enough money (" + plugin.economy.format(cost) + ")!");
+                String formatted = plugin.economy.format(cost);
+                String message = plugin.getConfig().getString("lang.not-enough-money", "You do not have enough money &8(&c%cost%&8)&c.").replace("%cost", formatted);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("lang.prefix", "&7[&cBoom&7] &r")) + ChatColor.translateAlternateColorCodes('&', message));
                 return false;
             }
         }
