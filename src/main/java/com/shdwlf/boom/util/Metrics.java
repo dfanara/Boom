@@ -582,7 +582,6 @@ public class Metrics {
         // Now read the response
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String response = reader.readLine();
-
         // close resources
         os.close();
         reader.close();

@@ -1,5 +1,6 @@
 package com.shdwlf.boom;
 
+import com.shdwlf.KeenMetrics;
 import com.shdwlf.UpdateChecker;
 import com.shdwlf.boom.listeners.BlockListener;
 import com.shdwlf.boom.listeners.InteractListener;
@@ -13,6 +14,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class Boom extends JavaPlugin {
 
@@ -66,21 +69,20 @@ public class Boom extends JavaPlugin {
 
     private void setupMetrics() throws IOException {
         Metrics metrics = new Metrics(this);
-        Metrics.Graph usageGraph = metrics.createGraph("Traps Created and Detonated");
-        usageGraph.addPlotter(new Metrics.Plotter("Traps Created") {
+        metrics.start();
+
+        KeenMetrics keenMetrics = new KeenMetrics(this);
+        keenMetrics.registerMetricReporter(new KeenMetrics.KeenMetricReporter() {
             @Override
-            public int getValue() {
-                return blockManager.getRegisterCount();
-            }
-        });
-        usageGraph.addPlotter(new Metrics.Plotter("Traps Detonated") {
-            @Override
-            public int getValue() {
-                return blockManager.getDetonationCount();
+            public HashMap<String, Object> getData() {
+                HashMap<String, Object> data = new HashMap<String, Object>();
+                data.put("registered", blockManager.getRegisterCount());
+                data.put("detonated", blockManager.getDetonationCount());
+                return data;
             }
         });
 
-        metrics.start();
+        keenMetrics.start();
     }
 
     private boolean setupEconomy() {
